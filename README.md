@@ -11,12 +11,12 @@
 | 6011755772471507  | 9 | 2019 | 100  | Ivanon Ivan  | 68000  |
 | 6011937144761860  | 9 | 2019 | 100  | Ivanon Ivan  | 68315  |
 
-####Пример запроса к /block
+#### Пример запроса к /block
 Method = "POST"
-#####Headers
+##### Headers
 Content-Type = "application/json"
-#####JSON
-```JSON
+##### JSON
+```
 {
    "merchant_contract_id":128,
    "card":{
@@ -31,11 +31,11 @@ Content-Type = "application/json"
       "amount":1
    }
 }```
-####Пример запроса к /charge
+#### Пример запроса к /charge
 Method = "POST"
-#####Headers
+##### Headers
 Content-Type = "application/json"
-#####JSON
+##### JSON
 ```JSON
 {
    "deal_id":1,
