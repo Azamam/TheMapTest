@@ -109,7 +109,9 @@ func (transaction *Transaction) validate() (Error, bool) {
 	if transaction.Card.Holder == "" || transaction.Card.Holder != cards[transaction.Card.PAN].Holder {
 		return WrongCardHolder, false
 	}
-	if transaction.Card.CVV < 99 && transaction.Card.CVV > 1000 {
+	if transaction.Card.CVV < 99 &&
+		transaction.Card.CVV > 1000 &&
+		cards[transaction.Card.PAN].CVV == transaction.Card.CVV {
 		return WrongCVV, false
 	}
 	if transaction.Deal.OrderID == "" {
