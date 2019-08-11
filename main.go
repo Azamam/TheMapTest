@@ -53,6 +53,7 @@ var (
 	InsufficientFunds    = myOnlyError(8, "You do not have enough funds on the card")
 	UnableToExecute      = myOnlyError(9, "Unable to execute")
 
+	ch                 = make(chan int, 10)
 	counterTransaction = 1
 	transactions       = make(map[int]Transaction)
 	cards              = make(map[string]Card)
@@ -132,6 +133,8 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		w.WriteHeader(http.StatusForbidden)
 	}
+	go requestToYa()
+	ch <- 0
 }
 
 func Block(w http.ResponseWriter, r *http.Request) {
@@ -170,6 +173,8 @@ func Block(w http.ResponseWriter, r *http.Request) {
 	} else {
 		w.WriteHeader(http.StatusForbidden)
 	}
+	go requestToYa()
+	ch <- 0
 }
 
 func Charge(w http.ResponseWriter, r *http.Request) {
@@ -197,14 +202,24 @@ func Charge(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	w.Header().Set("Content-Type", "application/json")
-
+	go requestToYa()
+	ch <- 0
 }
 
 func handleRequests() {
-	http.HandleFunc("/", Index)
-	http.HandleFunc("/block", Block)
-	http.HandleFunc("/charge", Charge)
+	go http.HandleFunc("/", Index)
+	go http.HandleFunc("/block", Block)
+	go http.HandleFunc("/charge", Charge)
 	log.Fatal(http.ListenAndServe(":7000", nil))
+}
+
+func requestToYa() {
+	r, err := http.Get("https://ya.ru/")
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	log.Println("ya.ru status code:", r.StatusCode)
+	<-ch
 }
 
 func main() {
