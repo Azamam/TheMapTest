@@ -30,13 +30,14 @@ Content-Type = "application/json"
       "order_id":"48eg6",
       "amount":1
    }
-}```
+}
+```
 #### Пример запроса к /charge
 Method = "POST"
 ##### Headers
 Content-Type = "application/json"
 ##### JSON
-```JSON
+```
 {
    "deal_id":1,
    "amount":100
